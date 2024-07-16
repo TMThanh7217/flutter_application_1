@@ -17,7 +17,8 @@ class MyApp extends StatelessWidget {
         title: 'Namer App but not really',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 78, 24, 149)),
+          colorScheme:
+              ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 78, 24, 149)),
         ),
         home: MyHomePage(),
       ),
@@ -27,13 +28,13 @@ class MyApp extends StatelessWidget {
 
 class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
-  
+
   void getNext() {
     current = WordPair.random();
     notifyListeners();
   }
 
-    // ↓ Add the code below.
+  // ↓ Add the code below.
   var favorites = <WordPair>[];
 
   void toggleFavorite() {
@@ -57,7 +58,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  
   var selectedIndex = 0;
 
   @override
@@ -74,43 +74,41 @@ class _MyHomePageState extends State<MyHomePage> {
         throw UnimplementedError('no widget for $selectedIndex');
     }
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Scaffold(
-          body: Row(
-            children: [
-              SafeArea(
-                child: NavigationRail(
-                  extended: constraints.maxWidth >= 600,
-                  destinations: [
-                    NavigationRailDestination(
-                      icon: Icon(Icons.home),
-                      label: Text('Home'),
-                    ),
-                    NavigationRailDestination(
-                      icon: Icon(Icons.favorite),
-                      label: Text('Favorites'),
-                    ),
-                  ],
-                  selectedIndex: selectedIndex,
-                  onDestinationSelected: (value) {
-                    setState(() {
-                      selectedIndex = value;
-                    });
-                  },
-                ),
+    return LayoutBuilder(builder: (context, constraints) {
+      return Scaffold(
+        body: Row(
+          children: [
+            SafeArea(
+              child: NavigationRail(
+                extended: constraints.maxWidth >= 600,
+                destinations: [
+                  NavigationRailDestination(
+                    icon: Icon(Icons.home),
+                    label: Text('Home'),
+                  ),
+                  NavigationRailDestination(
+                    icon: Icon(Icons.favorite),
+                    label: Text('Favorites'),
+                  ),
+                ],
+                selectedIndex: selectedIndex,
+                onDestinationSelected: (value) {
+                  setState(() {
+                    selectedIndex = value;
+                  });
+                },
               ),
-              Expanded(
-                child: Container(
-                  color: Theme.of(context).colorScheme.primaryContainer,
-                  child: page,
-                ),
+            ),
+            Expanded(
+              child: Container(
+                color: Theme.of(context).colorScheme.primaryContainer,
+                child: page,
               ),
-            ],
-          ),
-        );
-      }
-    );
+            ),
+          ],
+        ),
+      );
+    });
   }
 }
 
@@ -168,7 +166,7 @@ class WordPairCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); 
+    final theme = Theme.of(context);
 
     final style = theme.textTheme.displayMedium!.copyWith(
       color: theme.colorScheme.onPrimary,
@@ -188,10 +186,7 @@ class WordPairCard extends StatelessWidget {
   }
 }
 
-// ...
-
 class FavoritesPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
@@ -203,17 +198,20 @@ class FavoritesPage extends StatelessWidget {
       );
     }
 
-    return ListView(
+    return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(50),
           child: Text('You have '
               '${appState.favorites.length} favorites:'),
         ),
         for (var pair in appState.favorites)
           ListTile(
             leading: IconButton(
-              icon: Icon(Icons.delete_outline, semanticLabel: 'Delete',),
+              icon: Icon(
+                Icons.delete_outline,
+                semanticLabel: 'Delete',
+              ),
               color: theme.colorScheme.primary,
               onPressed: () {
                 appState.removeFavorite(pair);
